@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class DataService {
+public class EmployeeService {
     
     Database database;
-    public DataService(Database database) {
+    public EmployeeService(Database database) {
         this.database = database;
     }
 
@@ -24,9 +24,6 @@ public class DataService {
     }
     private ArrayList<Employee> tryGetEmployees() throws SQLException {
         ArrayList<Employee> empList = new ArrayList<>();
-
-        //feltötlés
-
         Connection con = database.connect();
         String sql = "select * from employees";
         Statement stmt = con.createStatement();
@@ -69,4 +66,45 @@ public class DataService {
         System.out.println("Num: " + num);
         con.close();
     }
+
+
+    public void deleteById(int id) {
+        try {
+            tryDeleteById(id);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    private void tryDeleteById(int id) throws SQLException {
+        Connection con = this.database.connect();
+        String sql = "delete from employees where id = ?";
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setInt(1, id);
+        ps.execute();
+        con.close();
+    }
+
+    public void update(Employee emp) {
+        try {
+            tryUpdate(emp);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+    private void tryUpdate(Employee emp) throws SQLException {
+        Connection con = this.database.connect();
+        String sql = """
+        update employees 
+        set name=?, city=?, salary=? 
+        where id=?
+        """;
+        PreparedStatement ps = con.prepareStatement(sql);
+        ps.setString(1, emp.getName());
+        ps.setString(2, emp.getCity());
+        ps.setInt(3, emp.getSalary());
+        ps.setInt(4, emp.getId());
+        ps.execute();
+        con.close();
+    }
+
 }
