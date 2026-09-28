@@ -1,7 +1,6 @@
 package com.example.controllers;
 
 import java.util.ArrayList;
-import java.util.Properties;
 
 import com.example.models.EmployeeService;
 import com.example.models.Mariadb;
@@ -19,8 +18,7 @@ public class MainController {
     public MainController() {
         this.employeeView = new EmployeeView();
         Config config = new Config();
-        Properties prop = config.read();
-        String dialect = prop.getProperty("dialect");
+        String dialect = config.getProperty("dialect");
         if(dialect.equals("sqlite")) {
             this.employeeService = new EmployeeService(new Sqlite());
         } if(dialect.equals("mariadb")) {

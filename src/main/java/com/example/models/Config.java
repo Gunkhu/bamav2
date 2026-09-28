@@ -5,20 +5,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class Config {
-    public Properties read() {
+public class Config extends Properties{
+    private final String fileName = "bamav.config";
+    public Config(){
+        read();
+    }
+    private void read() {
         try {
-            return tryRead();
+            tryRead();
         } catch (IOException e) {
             System.err.println(e.getMessage());
-            return null;
         }
     }
-    private Properties tryRead() throws IOException {
-        String fileName = "bamav.config";
+    private void tryRead() throws IOException {
         InputStream inputStream = new FileInputStream(fileName);
-        Properties config = new Properties();
-        config.load(inputStream);
-        return config;
+        load(inputStream);
     }
 }
